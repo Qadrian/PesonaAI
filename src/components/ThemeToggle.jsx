@@ -1,28 +1,39 @@
 import React from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
-import { Button } from './ui/button';
 
 export default function ThemeToggle() {
   const { isDarkMode, toggleTheme } = useTheme();
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
+    <div
+      className={`relative flex items-center w-14 h-8 cursor-pointer select-none transition-all`}
       onClick={toggleTheme}
-      className={`rounded-full p-2 transition-all duration-200 ${
-        isDarkMode 
-          ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' 
-          : 'bg-gray-800/10 text-gray-800 border-gray-800/20 hover:bg-gray-800/20'
-      }`}
-      title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      role="switch"
+      aria-checked={isDarkMode}
+      tabIndex={0}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && toggleTheme()}
     >
-      {isDarkMode ? (
-        <Sun className="h-4 w-4" />
-      ) : (
-        <Moon className="h-4 w-4" />
-      )}
-    </Button>
+      {/* Track */}
+      <div
+        className={`absolute left-0 top-0 w-14 h-8 rounded-full transition-colors duration-300 ${
+          isDarkMode ? 'bg-[#0d1a2f]' : 'bg-[#ede9fe]'
+        }`}
+      />
+      {/* Thumb */}
+      <div
+        className={`z-10 flex items-center justify-center w-8 h-8 rounded-full shadow transition-all duration-300 transform ${
+          isDarkMode
+            ? 'translate-x-0 bg-[#0d1a2f] text-white'
+            : 'translate-x-6 bg-white text-[#7c3aed] border border-[#ede9fe]'
+        }`}
+      >
+        {isDarkMode ? (
+          <Sun className="w-5 h-5" />
+        ) : (
+          <Moon className="w-5 h-5" />
+        )}
+      </div>
+    </div>
   );
 } 

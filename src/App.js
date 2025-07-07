@@ -84,22 +84,6 @@ export default function App() {
         {/* Desktop actions */}
         <div className="hidden md:flex items-center space-x-4">
           <ThemeToggle />
-          <a
-            href="https://qadrian.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              variant="outline"
-              className={`rounded-full px-6 font-semibold shadow transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'bg-white text-[#0e2148] border-white hover:bg-white/90' 
-                  : 'bg-gray-800 text-white border-gray-800 hover:bg-gray-700'
-              }`}
-            >
-              About Us
-            </Button>
-          </a>
           <img
             src="https://randomuser.me/api/portraits/men/32.jpg"
             alt="Profile"
