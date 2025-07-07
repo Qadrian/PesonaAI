@@ -1,0 +1,32 @@
+name: Deploy PesonaAI App
+
+on:
+  push:
+    branches:
+      - main # Trigger hanya jika push ke branch main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_SSH_HOST }}
+        username: ${{ secrets.VPS_SSH_USERNAME }}
+        password: ${{ secrets.VPS_SSH_PASSWORD }}
+        script: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm use node
+          cd PesonaAI
+          git pull origin main
+          pm2 delete pesonaai-frontend || true
+          pm2 delete pesonaai-backend || true
+          pm2 start "npm start" --name pesonaai-frontend
+          cd server
+          pm2 start index.js --name pesonaai-backend
