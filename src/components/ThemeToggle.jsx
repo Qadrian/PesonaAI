@@ -28,10 +28,10 @@ export default function ThemeToggle() {
             : 'translate-x-6 bg-white text-[#7c3aed] border border-[#ede9fe]'
         }`}
       >
-        {isDarkMode ? (
-          <Sun className="w-5 h-5" />
-        ) : (
+        {!isDarkMode ? (
           <Moon className="w-5 h-5" />
+        ) : (
+          <Sun className="w-5 h-5" />
         )}
       </div>
     </div>

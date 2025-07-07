@@ -150,7 +150,7 @@ export default function App() {
         
         {/* Chat History Container - Fixed height with scroll */}
           {(chatHistory.length > 0 || loading) && (
-          <div className="flex-1 flex flex-col justify-end mb-4">
+          <div className="flex-1 flex flex-col justify-start items-center mt-12 mb-4">
             <div
               ref={chatBoxRef}
               className={`w-full max-w-4xl mx-auto text-lg flex flex-col gap-3 overflow-y-auto ${
@@ -166,14 +166,14 @@ export default function App() {
               {chatHistory.map((chat, idx) => (
                 <React.Fragment key={idx}>
                   {/* User chat kanan */}
-                  <div className="flex justify-end">
-                    <div className={`${isDarkMode ? 'bg-[#40414f] text-white' : 'bg-blue-500/80 text-white'} rounded-xl px-4 py-3 max-w-[80%] text-right shadow break-words whitespace-pre-wrap`}>
+                  <div className="flex justify-end w-full">
+                    <div className={`${isDarkMode ? 'bg-[#40414f] text-white' : 'bg-blue-500/80 text-white'} rounded-xl px-4 py-3 max-w-[80%] text-right shadow break-words whitespace-pre-wrap ml-auto`}>
                       {chat.user}
                     </div>
                   </div>
                   {/* PesonaAI chat kiri */}
                   {chat.pesonaAI && (
-                    <div className="flex justify-start">
+                    <div className="flex justify-start w-full">
                       <div className={`backdrop-blur-sm rounded-xl px-4 py-3 max-w-[80%] text-left shadow-sm break-words whitespace-pre-wrap leading-relaxed ${
                         isDarkMode 
                           ? 'bg-[#40414f] text-white' 
@@ -192,7 +192,7 @@ export default function App() {
                 </React.Fragment>
               ))}
               {loading && (
-                <div className="flex justify-start">
+                <div className="flex justify-start w-full">
                   <div className={`backdrop-blur-sm italic rounded-xl px-4 py-3 max-w-[80%] shadow-sm ${
                     isDarkMode 
                       ? 'bg-[#40414f] text-white/80' 
