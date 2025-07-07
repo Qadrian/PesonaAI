@@ -105,13 +105,12 @@ export default function App() {
         {/* Desktop actions */}
         <div className="hidden md:flex items-center space-x-4">
           <ThemeToggle />
-          <img
-            src="https://randomuser.me/api/portraits/men/32.jpg"
-            alt="Profile"
-            className={`w-9 h-9 rounded-full object-cover border-2 shadow transition-colors duration-200 ${
-              isDarkMode ? 'border-white' : 'border-gray-800'
-            }`}
-          />
+          <Button
+            className={`px-6 py-2 rounded-md font-semibold shadow-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#232325] text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-[#333] transition-colors duration-200`}
+            style={{ borderRadius: '8px' }}
+          >
+            Login
+          </Button>
         </div>
         {/* Mobile hamburger */}
         <button
@@ -132,8 +131,8 @@ export default function App() {
           {showHeading && (
           <div className="flex flex-col items-center justify-start pt-16 md:pt-24">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-center mb-2 select-none">
-              <span className={`font-normal ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{typedHeading.replace(/PesonaAI!$/, "")}</span>
-              <span className="font-extrabold text-gradient-blue">{typedHeading.endsWith("PesonaAI!") ? "PesonaAI!" : ""}</span>
+              <span className={`font-normal ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{typedHeading.replace(/PesonaAI!?$/, "")}</span>
+              <span className="font-extrabold text-gradient-blue">{typedHeading.endsWith("PesonaAI!") || typedHeading.endsWith("PesonaAI") ? "PesonaAI" : ""}</span>
             </h1>
             {showSubtext && (
               <div className={`text-base md:text-lg mt-2 mb-8 text-center ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
@@ -142,12 +141,12 @@ export default function App() {
               </div>
             )}
             {/* Input positioned below welcome text when no chat */}
-            <div className="w-full max-w-2xl mt-6">
+            <div className="w-full max-w-4xl mt-6">
               <form className="w-full flex items-center justify-center" onSubmit={handleSubmit}>
-                <div className={`flex items-end w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-4 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333]`}>
+                <div className={`flex items-end w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-6 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333]`}>
                   <textarea
                     placeholder={placeholder}
-                    className="flex-1 min-h-[44px] max-h-40 md:min-h-[56px] px-3 py-2 md:px-4 md:py-3 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-transparent border-0 rounded-2xl text-base md:text-lg resize-none overflow-y-auto focus:outline-none custom-scrollbar"
+                    className="flex-1 min-h-[44px] max-h-40 md:min-h-[56px] px-3 py-2 md:px-4 md:py-3 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-transparent border-0 rounded-2xl text-base md:text-lg resize-none focus:outline-none scrollbar-hide"
                     value={question}
                     onChange={e => setQuestion(e.target.value)}
                     onInput={e => {
@@ -168,7 +167,7 @@ export default function App() {
                   <Button
                     size="icon"
                     type="submit"
-                    className={`ml-2 rounded-full h-11 w-11 flex items-center justify-center shadow-md transition-colors duration-200 ${isDarkMode ? 'bg-[#232325] hover:bg-[#333] text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                    className={`ml-2 rounded-full h-11 w-11 flex items-center justify-center shadow-md transition-colors duration-200 border ${isDarkMode ? 'bg-[#232325] hover:bg-[#333] text-white border-white' : 'bg-blue-500 hover:bg-blue-600 text-white border-blue-500'}`}
                     disabled={loading}
                   >
                     <ArrowUp className="h-5 w-5" />
@@ -242,33 +241,38 @@ export default function App() {
         {(chatHistory.length > 0 || loading) && (
           <div className="w-full max-w-4xl mx-auto pb-6">
             <form className="w-full flex items-center justify-center" onSubmit={handleSubmit}>
-              <div className="flex items-center w-full bg-white rounded-[50px] shadow-md focus-within:ring-2 focus-within:ring-white/20 pr-4">
+              <div className={`flex items-end w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-6 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333]`}>
                 <textarea
-              placeholder={placeholder}
-                  className="flex-1 min-h-[48px] md:min-h-[56px] max-h-32 pl-6 py-3 text-gray-600 placeholder:text-gray-400 bg-transparent border-0 rounded-[50px] text-lg resize-none overflow-hidden focus:outline-none"
-              value={question}
-              onChange={e => setQuestion(e.target.value)}
+                  placeholder={placeholder}
+                  className="flex-1 min-h-[44px] max-h-40 md:min-h-[56px] px-3 py-2 md:px-4 md:py-3 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-transparent border-0 rounded-2xl text-base md:text-lg resize-none focus:outline-none scrollbar-hide"
+                  value={question}
+                  onChange={e => setQuestion(e.target.value)}
+                  onInput={e => {
+                    e.target.style.height = 'auto';
+                    e.target.style.height = e.target.scrollHeight + 'px';
+                  }}
                   onKeyDown={e => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
                       handleSubmit(e);
                     }
                   }}
-              disabled={loading}
-              autoFocus
+                  disabled={loading}
+                  autoFocus
                   rows={1}
-            />
-            <Button
-              size="sm"
-              type="submit"
-                  className="ml-2 h-9 w-9 md:h-10 md:w-10 rounded-full bg-white hover:bg-white/90 p-0 flex items-center justify-center shadow"
-              disabled={loading}
-            >
-              <Send className="h-4 w-4 text-[#0e2148]" />
-              <span className="sr-only">Send</span>
-            </Button>
-          </div>
-        </form>
+                  style={{overflowY: 'auto'}}
+                />
+                <Button
+                  size="icon"
+                  type="submit"
+                  className={`ml-2 rounded-full h-11 w-11 flex items-center justify-center shadow-md transition-colors duration-200 border ${isDarkMode ? 'bg-[#232325] hover:bg-[#333] text-white border-white' : 'bg-blue-500 hover:bg-blue-600 text-white border-blue-500'}`}
+                  disabled={loading}
+                >
+                  <ArrowUp className="h-5 w-5" />
+                  <span className="sr-only">Send</span>
+                </Button>
+              </div>
+            </form>
           </div>
         )}
       </div>
