@@ -1,0 +1,30 @@
+name: Deploy PesonaAI App
+
+on:
+  push:
+    branches:
+      - main # Or your deployment branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master # <--- Use appleboy/ssh-action
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_PASSWORD }} # <--- Pass the password secret here
+        script: |
+          cd PesonaAI
+          git pull origin main
+          pm2 delete pesonaai-frontend
+          pm2 delete pesonaai-backend
+          pm2 start "npm start" --name pesonaai-frontend
+          cd server
+          pm2 start index.js --name pesonaai-backend
+          # ... other commands ...
