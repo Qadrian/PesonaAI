@@ -30,21 +30,21 @@ export default function App() {
     e.preventDefault();
     if (!question.trim()) return;
     setLoading(true);
-    // Tambahkan pertanyaan user ke chatHistory, respons Skaila menyusul
-    setChatHistory(prev => [...prev, { user: question, skaila: null }]);
+    // Tambahkan pertanyaan user ke chatHistory, respons PesonaAI menyusul
+    setChatHistory(prev => [...prev, { user: question, pesonaAI: null }]);
     try {
       const res = await query({ question });
       setChatHistory(prev => {
-        // Update respons Skaila pada chat terakhir
+        // Update respons PesonaAI pada chat terakhir
         const updated = [...prev];
-        updated[updated.length - 1] = { ...updated[updated.length - 1], skaila: res.text || JSON.stringify(res) };
+        updated[updated.length - 1] = { ...updated[updated.length - 1], pesonaAI: res.text || JSON.stringify(res) };
         return updated;
       });
       setQuestion(""); // reset input setelah respons
     } catch (err) {
       setChatHistory(prev => {
         const updated = [...prev];
-        updated[updated.length - 1] = { ...updated[updated.length - 1], skaila: "Terjadi kesalahan. Silakan coba lagi." };
+        updated[updated.length - 1] = { ...updated[updated.length - 1], pesonaAI: "Terjadi kesalahan. Silakan coba lagi." };
         return updated;
       });
       setQuestion("");
@@ -61,21 +61,21 @@ export default function App() {
 
   // Placeholder dinamis
   const placeholder = chatHistory.length === 0 && !loading
-    ? "Tanyakan pada Skaila!"
+    ? "Ask PesonaAI anything!"
     : "";
 
   const showHeading = chatHistory.length === 0 && !loading;
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#15305c] via-[#18376b] to-[#0e2148] relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-black relative overflow-hidden">
       {/* Vignette effect */}
-      <div className="pointer-events-none absolute inset-0 z-0" style={{background: "radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, rgba(14,33,72,0.95) 70%)"}} />
+      <div className="pointer-events-none absolute inset-0 z-0" style={{background: "radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.98) 70%)"}} />
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between w-full px-12 pt-10">
         <Logo />
         <div className="flex items-center space-x-4">
           <a
-            href="https://www.aeccglobal.co.id"
+            href="https://qadrian.com/"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -100,8 +100,8 @@ export default function App() {
           {showHeading && (
           <div className="flex-1 flex flex-col items-center justify-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-light text-center mb-8">
-              <span className="text-white font-normal">Halo </span>
-              <span className="font-extrabold bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent">Masyarakat!</span>
+              <span className="text-white font-normal">Welcome to </span>
+              <span className="font-extrabold bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent">PesonaAI!</span>
             </h1>
                          {/* Input positioned below welcome text when no chat */}
              <div className="w-full max-w-4xl">
@@ -158,12 +158,12 @@ export default function App() {
                       {chat.user}
                     </div>
                   </div>
-                  {/* Skaila chat kiri */}
-                  {chat.skaila && (
+                  {/* PesonaAI chat kiri */}
+                  {chat.pesonaAI && (
                     <div className="flex justify-start">
                       <div className="bg-white/10 backdrop-blur-sm text-white rounded-xl px-4 py-3 max-w-[80%] text-left shadow-sm break-words whitespace-pre-wrap leading-relaxed">
                         <div className="space-y-2">
-                          {chat.skaila.split('\n').map((paragraph, pIdx) => (
+                          {chat.pesonaAI.split('\n').map((paragraph, pIdx) => (
                             <p key={pIdx} className={pIdx > 0 ? 'mt-3' : ''}>
                               {paragraph}
                             </p>

@@ -1,10 +1,13 @@
 export default function Logo() {
   return (
-    <img
-      src="/logo-aecc.svg"
-      alt="aecc logo"
-      className="h-10 w-auto"
-      style={{maxWidth: 160}}
-    />
+    <div 
+      className="text-white font-bold text-2xl"
+      style={{
+        fontFamily: 'Poppins, Montserrat, Arial, sans-serif',
+        fontWeight: 700
+      }}
+    >
+      PesonaAI
+    </div>
   )
 } 
