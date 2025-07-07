@@ -1,40 +1,28 @@
 import React from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import { Sun, Settings } from 'lucide-react';
-import '../styles/theme.css';
+import { Sun, Moon } from 'lucide-react';
+import { Button } from './ui/button';
 
 export default function ThemeToggle() {
   const { isDarkMode, toggleTheme } = useTheme();
 
   return (
-    <div
-      className="flex items-center cursor-pointer select-none"
+    <Button
+      variant="outline"
+      size="sm"
       onClick={toggleTheme}
+      className={`rounded-full p-2 transition-all duration-200 ${
+        isDarkMode 
+          ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' 
+          : 'bg-gray-800/10 text-gray-800 border-gray-800/20 hover:bg-gray-800/20'
+      }`}
       title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-      style={{ minWidth: 48 }}
     >
-      {/* Track */}
-      <div
-        className={`w-12 h-7 rounded-full flex items-center transition-colors duration-200 px-1 ${
-          isDarkMode ? 'bg-[#23304d]' : 'bg-[#ede9fe]'
-        }`}
-      >
-        {/* Thumb */}
-        <div
-          className={`w-7 h-7 rounded-full shadow flex items-center justify-center transition-all duration-200 ${
-            isDarkMode
-              ? 'translate-x-0 bg-[#0d1a2f] text-white'
-              : 'translate-x-5 bg-white text-[#7c3aed]'
-          }`}
-          style={{ position: 'relative', zIndex: 2 }}
-        >
-          {isDarkMode ? (
-            <Sun className="w-5 h-5" />
-          ) : (
-            <Settings className="w-5 h-5" />
-          )}
-        </div>
-      </div>
-    </div>
+      {isDarkMode ? (
+        <Sun className="h-4 w-4" />
+      ) : (
+        <Moon className="h-4 w-4" />
+      )}
+    </Button>
   );
 } 

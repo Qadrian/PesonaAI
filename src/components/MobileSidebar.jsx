@@ -33,6 +33,9 @@ export default function MobileSidebar({ open, onClose }) {
         </div>
         <div className="flex flex-col gap-4 flex-1">
           <ThemeToggle />
+          <a href="https://qadrian.com/" target="_blank" rel="noopener noreferrer">
+            <Button className="w-full">About Us</Button>
+          </a>
           <div className="flex items-center gap-3 mt-8">
             <img
               src="https://randomuser.me/api/portraits/men/32.jpg"
