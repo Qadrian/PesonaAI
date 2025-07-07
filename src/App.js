@@ -6,6 +6,7 @@ import { useTheme } from "./contexts/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
 import MobileSidebar from "./components/MobileSidebar";
 import './styles/theme.css';
+import './index.css';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
