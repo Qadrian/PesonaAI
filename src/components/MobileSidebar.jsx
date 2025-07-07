@@ -33,17 +33,12 @@ export default function MobileSidebar({ open, onClose }) {
         </div>
         <div className="flex flex-col gap-4 flex-1">
           <ThemeToggle />
-          <div className="flex items-center gap-3 mt-8">
-            <img
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="Profile"
-              className={`w-10 h-10 rounded-full object-cover border-2 shadow ${isDarkMode ? 'border-white' : 'border-gray-300'}`}
-            />
-            <div>
-              <div className="font-semibold">User</div>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>user@email.com</div>
-            </div>
-          </div>
+          <Button
+            className={`w-full mt-8 px-0 py-2 rounded-md font-semibold shadow-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#232325] text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-[#333] transition-colors duration-200`}
+            style={{ borderRadius: '8px' }}
+          >
+            Login
+          </Button>
         </div>
       </aside>
     </div>

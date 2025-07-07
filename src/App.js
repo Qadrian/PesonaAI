@@ -17,6 +17,8 @@ export default function App() {
   const [typedHeading, setTypedHeading] = useState("");
   const fullHeading = "Meet PesonaAI!";
   const [showSubtext, setShowSubtext] = useState(false);
+  const [isTextareaMultiline, setIsTextareaMultiline] = useState(false);
+  const textareaRef = useRef(null);
 
   async function query(data) {
     const response = await fetch(
@@ -70,7 +72,7 @@ export default function App() {
 
   // Placeholder dinamis
   const placeholder = chatHistory.length === 0 && !loading
-    ? "Tanyakan pada PesonaAI!"
+    ? "Ask anything"
     : "";
 
   const showHeading = chatHistory.length === 0 && !loading;
@@ -122,8 +124,8 @@ export default function App() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <MobileSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       </header>
+      <MobileSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       {/* Fixed Chat Container */}
       <div className="flex-1 flex flex-col relative z-10 px-4 md:px-8 lg:px-12">
@@ -134,24 +136,25 @@ export default function App() {
               <span className={`font-normal ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{typedHeading.replace(/PesonaAI!?$/, "")}</span>
               <span className="font-extrabold text-gradient-blue">{typedHeading.endsWith("PesonaAI!") || typedHeading.endsWith("PesonaAI") ? "PesonaAI" : ""}</span>
             </h1>
-            {showSubtext && (
-              <div className={`text-base md:text-lg mt-2 mb-8 text-center ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                style={{ transition: 'color 0.3s' }}>
-                More than just an AI agent, it's your personal assistant
-              </div>
-            )}
+            <div className={`text-base md:text-lg mt-2 mb-8 text-center ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+              style={{ transition: 'color 0.3s' }}>
+              More than just an AI chatbot, it's your personal assistant
+            </div>
             {/* Input positioned below welcome text when no chat */}
             <div className="w-full max-w-4xl mt-6">
               <form className="w-full flex items-center justify-center" onSubmit={handleSubmit}>
-                <div className={`flex items-end w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-6 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333]`}>
+                <div className={`flex w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-6 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333] ${isTextareaMultiline ? 'items-end' : 'items-center'}`}>
                   <textarea
+                    ref={textareaRef}
                     placeholder={placeholder}
                     className="flex-1 min-h-[44px] max-h-40 md:min-h-[56px] px-3 py-2 md:px-4 md:py-3 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-transparent border-0 rounded-2xl text-base md:text-lg resize-none focus:outline-none scrollbar-hide"
                     value={question}
                     onChange={e => setQuestion(e.target.value)}
                     onInput={e => {
+                      const minHeight = 56; // px, match md:min-h-[56px]
                       e.target.style.height = 'auto';
                       e.target.style.height = e.target.scrollHeight + 'px';
+                      setIsTextareaMultiline(e.target.scrollHeight > minHeight);
                     }}
                     onKeyDown={e => {
                       if (e.key === 'Enter' && !e.shiftKey) {
@@ -239,17 +242,20 @@ export default function App() {
         
         {/* Fixed Input Container at Bottom - only show when there's chat history */}
         {(chatHistory.length > 0 || loading) && (
-          <div className="w-full max-w-4xl mx-auto pb-6">
+          <div className="w-full max-w-4xl mx-auto pb-6 mb-3">
             <form className="w-full flex items-center justify-center" onSubmit={handleSubmit}>
-              <div className={`flex items-end w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-6 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333]`}>
+              <div className={`flex w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-6 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333] ${isTextareaMultiline ? 'items-end' : 'items-center'}`}>
                 <textarea
+                  ref={textareaRef}
                   placeholder={placeholder}
                   className="flex-1 min-h-[44px] max-h-40 md:min-h-[56px] px-3 py-2 md:px-4 md:py-3 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-transparent border-0 rounded-2xl text-base md:text-lg resize-none focus:outline-none scrollbar-hide"
                   value={question}
                   onChange={e => setQuestion(e.target.value)}
                   onInput={e => {
+                    const minHeight = 56; // px, match md:min-h-[56px]
                     e.target.style.height = 'auto';
                     e.target.style.height = e.target.scrollHeight + 'px';
+                    setIsTextareaMultiline(e.target.scrollHeight > minHeight);
                   }}
                   onKeyDown={e => {
                     if (e.key === 'Enter' && !e.shiftKey) {
@@ -273,6 +279,7 @@ export default function App() {
                 </Button>
               </div>
             </form>
+            <div className={`text-xs text-center mt-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>PesonaAI can make mistakes, please double-check its information.</div>
           </div>
         )}
       </div>
