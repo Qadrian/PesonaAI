@@ -2,12 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import Logo from "./components/Logo"
 import { Button } from "./components/ui/button"
 import { Send } from "lucide-react"
+import { useTheme } from "./contexts/ThemeContext";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function App() {
   const [question, setQuestion] = useState("");
   const [chatHistory, setChatHistory] = useState([]); // [{user: '', skaila: ''}]
   const [loading, setLoading] = useState(false);
   const chatBoxRef = useRef(null);
+  const { isDarkMode } = useTheme();
 
   async function query(data) {
     const response = await fetch(
@@ -61,19 +64,26 @@ export default function App() {
 
   // Placeholder dinamis
   const placeholder = chatHistory.length === 0 && !loading
-    ? "Ask PesonaAI anything!"
+    ? "Tanyakan pada PesonaAI!"
     : "";
 
   const showHeading = chatHistory.length === 0 && !loading;
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-black relative overflow-hidden">
+    <div className={`min-h-screen w-full flex flex-col relative overflow-hidden transition-colors duration-300 ${
+      isDarkMode ? 'bg-black' : 'bg-gray-50'
+    }`}>
       {/* Vignette effect */}
-      <div className="pointer-events-none absolute inset-0 z-0" style={{background: "radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.98) 70%)"}} />
+      <div className="pointer-events-none absolute inset-0 z-0" style={{
+        background: isDarkMode 
+          ? "radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.98) 70%)"
+          : "radial-gradient(ellipse at center, rgba(0,0,0,0.02) 0%, rgba(255,255,255,0.98) 70%)"
+      }} />
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between w-full px-12 pt-10">
         <Logo />
         <div className="flex items-center space-x-4">
+          <ThemeToggle />
           <a
             href="https://qadrian.com/"
             target="_blank"
@@ -81,7 +91,11 @@ export default function App() {
           >
             <Button
               variant="outline"
-              className="bg-white text-[#0e2148] border-white hover:bg-white/90 rounded-full px-6 font-semibold shadow"
+              className={`rounded-full px-6 font-semibold shadow transition-colors duration-200 ${
+                isDarkMode 
+                  ? 'bg-white text-[#0e2148] border-white hover:bg-white/90' 
+                  : 'bg-gray-800 text-white border-gray-800 hover:bg-gray-700'
+              }`}
             >
               About Us
             </Button>
@@ -89,7 +103,9 @@ export default function App() {
           <img
             src="https://randomuser.me/api/portraits/men/32.jpg"
             alt="Profile"
-            className="w-9 h-9 rounded-full object-cover border-2 border-white shadow"
+            className={`w-9 h-9 rounded-full object-cover border-2 shadow transition-colors duration-200 ${
+              isDarkMode ? 'border-white' : 'border-gray-800'
+            }`}
           />
         </div>
       </header>
@@ -100,7 +116,7 @@ export default function App() {
           {showHeading && (
           <div className="flex-1 flex flex-col items-center justify-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-light text-center mb-8">
-              <span className="text-white font-normal">Welcome to </span>
+              <span className={`font-normal ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Welcome to </span>
               <span className="font-extrabold bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent">PesonaAI!</span>
             </h1>
                          {/* Input positioned below welcome text when no chat */}
@@ -142,7 +158,9 @@ export default function App() {
           <div className="flex-1 flex flex-col justify-end mb-4">
             <div
               ref={chatBoxRef}
-              className="w-full max-w-4xl mx-auto text-white text-lg flex flex-col gap-3 overflow-y-auto"
+              className={`w-full max-w-4xl mx-auto text-lg flex flex-col gap-3 overflow-y-auto ${
+                isDarkMode ? 'text-white' : 'text-gray-800'
+              }`}
               style={{ 
                 maxHeight: 'calc(100vh - 200px)',
                 minHeight: '200px',
@@ -161,7 +179,11 @@ export default function App() {
                   {/* PesonaAI chat kiri */}
                   {chat.pesonaAI && (
                     <div className="flex justify-start">
-                      <div className="bg-white/10 backdrop-blur-sm text-white rounded-xl px-4 py-3 max-w-[80%] text-left shadow-sm break-words whitespace-pre-wrap leading-relaxed">
+                      <div className={`backdrop-blur-sm rounded-xl px-4 py-3 max-w-[80%] text-left shadow-sm break-words whitespace-pre-wrap leading-relaxed ${
+                        isDarkMode 
+                          ? 'bg-white/10 text-white' 
+                          : 'bg-gray-800/10 text-gray-800'
+                      }`}>
                         <div className="space-y-2">
                           {chat.pesonaAI.split('\n').map((paragraph, pIdx) => (
                             <p key={pIdx} className={pIdx > 0 ? 'mt-3' : ''}>
@@ -176,7 +198,11 @@ export default function App() {
               ))}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="bg-white/10 backdrop-blur-sm italic text-white/80 rounded-xl px-4 py-3 max-w-[80%] shadow-sm">
+                  <div className={`backdrop-blur-sm italic rounded-xl px-4 py-3 max-w-[80%] shadow-sm ${
+                    isDarkMode 
+                      ? 'bg-white/10 text-white/80' 
+                      : 'bg-gray-800/10 text-gray-600'
+                  }`}>
                     hmm.. <span className="inline-block animate-bounce">🤔</span>
                   </div>
                 </div>
