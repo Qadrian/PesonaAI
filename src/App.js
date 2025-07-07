@@ -4,6 +4,7 @@ import { Button } from "./components/ui/button"
 import { Send } from "lucide-react"
 import { useTheme } from "./contexts/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
+import MobileSidebar from "./components/MobileSidebar";
 
 export default function App() {
   const [question, setQuestion] = useState("");
@@ -11,6 +12,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const chatBoxRef = useRef(null);
   const { isDarkMode } = useTheme();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   async function query(data) {
     const response = await fetch(
@@ -71,18 +73,19 @@ export default function App() {
 
   return (
     <div className={`min-h-screen w-full flex flex-col relative overflow-hidden transition-colors duration-300 ${
-      isDarkMode ? 'bg-black' : 'bg-gray-50'
+      isDarkMode ? 'bg-[#343541]' : 'bg-gray-50'
     }`}>
       {/* Vignette effect */}
       <div className="pointer-events-none absolute inset-0 z-0" style={{
         background: isDarkMode 
-          ? "radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.98) 70%)"
+          ? "radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, rgba(52,53,65,0.98) 70%)"
           : "radial-gradient(ellipse at center, rgba(0,0,0,0.02) 0%, rgba(255,255,255,0.98) 70%)"
       }} />
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between w-full px-12 pt-10">
+      <header className="relative z-10 flex items-center justify-between w-full px-4 md:px-12 pt-6 md:pt-10">
         <Logo />
-        <div className="flex items-center space-x-4">
+        {/* Desktop actions */}
+        <div className="hidden md:flex items-center space-x-4">
           <ThemeToggle />
           <a
             href="https://qadrian.com/"
@@ -108,6 +111,17 @@ export default function App() {
             }`}
           />
         </div>
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden flex items-center justify-center ml-2 rounded-full p-2 bg-white/10 hover:bg-white/20 text-white"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open menu"
+        >
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <MobileSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       </header>
       
       {/* Fixed Chat Container */}
@@ -172,7 +186,7 @@ export default function App() {
                 <React.Fragment key={idx}>
                   {/* User chat kanan */}
                   <div className="flex justify-end">
-                    <div className="bg-blue-500/80 text-white rounded-xl px-4 py-3 max-w-[80%] text-right shadow break-words whitespace-pre-wrap">
+                    <div className={`${isDarkMode ? 'bg-[#40414f] text-white' : 'bg-blue-500/80 text-white'} rounded-xl px-4 py-3 max-w-[80%] text-right shadow break-words whitespace-pre-wrap`}>
                       {chat.user}
                     </div>
                   </div>
@@ -181,7 +195,7 @@ export default function App() {
                     <div className="flex justify-start">
                       <div className={`backdrop-blur-sm rounded-xl px-4 py-3 max-w-[80%] text-left shadow-sm break-words whitespace-pre-wrap leading-relaxed ${
                         isDarkMode 
-                          ? 'bg-white/10 text-white' 
+                          ? 'bg-[#40414f] text-white' 
                           : 'bg-gray-800/10 text-gray-800'
                       }`}>
                         <div className="space-y-2">
@@ -200,7 +214,7 @@ export default function App() {
                 <div className="flex justify-start">
                   <div className={`backdrop-blur-sm italic rounded-xl px-4 py-3 max-w-[80%] shadow-sm ${
                     isDarkMode 
-                      ? 'bg-white/10 text-white/80' 
+                      ? 'bg-[#40414f] text-white/80' 
                       : 'bg-gray-800/10 text-gray-600'
                   }`}>
                     hmm.. <span className="inline-block animate-bounce">🤔</span>
