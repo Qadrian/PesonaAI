@@ -5,6 +5,7 @@ import { Send } from "lucide-react"
 import { useTheme } from "./contexts/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
 import MobileSidebar from "./components/MobileSidebar";
+import './styles/theme.css';
 
 export default function App() {
   const [question, setQuestion] = useState("");
@@ -73,14 +74,10 @@ export default function App() {
 
   return (
     <div className={`min-h-screen w-full flex flex-col relative overflow-hidden transition-colors duration-300 ${
-      isDarkMode ? 'bg-[#343541]' : 'bg-gray-50'
+      isDarkMode ? 'bg-dark-main' : 'bg-gray-50'
     }`}>
       {/* Vignette effect */}
-      <div className="pointer-events-none absolute inset-0 z-0" style={{
-        background: isDarkMode 
-          ? "radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, rgba(52,53,65,0.98) 70%)"
-          : "radial-gradient(ellipse at center, rgba(0,0,0,0.02) 0%, rgba(255,255,255,0.98) 70%)"
-      }} />
+      <div className={`pointer-events-none absolute inset-0 z-0 ${isDarkMode ? 'vignette-dark' : 'vignette-light'}`} />
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between w-full px-4 md:px-12 pt-6 md:pt-10">
         <Logo />
@@ -131,7 +128,7 @@ export default function App() {
           <div className="flex-1 flex flex-col items-center justify-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-light text-center mb-8">
               <span className={`font-normal ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Welcome to </span>
-              <span className="font-extrabold bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent">PesonaAI!</span>
+              <span className="font-extrabold text-gradient-blue">PesonaAI!</span>
             </h1>
                          {/* Input positioned below welcome text when no chat */}
              <div className="w-full max-w-4xl">

@@ -3,6 +3,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from './ThemeToggle';
 import { Button } from './ui/button';
 import { X } from 'lucide-react';
+import '../styles/theme.css';
 
 export default function MobileSidebar({ open, onClose }) {
   const { isDarkMode } = useTheme();
@@ -19,9 +20,9 @@ export default function MobileSidebar({ open, onClose }) {
       />
       {/* Sidebar */}
       <aside
-        className={`absolute right-0 top-0 h-full w-64 shadow-lg p-6 flex flex-col gap-6 transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`absolute right-0 top-0 h-full w-64 shadow-lg p-6 flex flex-col gap-6 transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'} ${isDarkMode ? 'bg-dark-sidebar' : ''}`}
         style={{
-          background: isDarkMode ? '#18181a' : '#fff',
+          background: isDarkMode ? undefined : '#fff',
           color: isDarkMode ? 'white' : '#1f2937',
         }}
       >
