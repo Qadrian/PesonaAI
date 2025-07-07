@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Logo from "./components/Logo"
 import { Button } from "./components/ui/button"
-import { Send } from "lucide-react"
+import { Send, ArrowUp } from "lucide-react"
 import { useTheme } from "./contexts/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
 import MobileSidebar from "./components/MobileSidebar";
@@ -14,6 +14,9 @@ export default function App() {
   const chatBoxRef = useRef(null);
   const { isDarkMode } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [typedHeading, setTypedHeading] = useState("");
+  const fullHeading = "Meet PesonaAI!";
+  const [showSubtext, setShowSubtext] = useState(false);
 
   async function query(data) {
     const response = await fetch(
@@ -72,6 +75,24 @@ export default function App() {
 
   const showHeading = chatHistory.length === 0 && !loading;
 
+  // Typing effect for heading
+  useEffect(() => {
+    if (showHeading) {
+      setTypedHeading("");
+      setShowSubtext(false);
+      let i = 0;
+      const interval = setInterval(() => {
+        setTypedHeading(fullHeading.slice(0, i + 1));
+        i++;
+        if (i === fullHeading.length) {
+          clearInterval(interval);
+          setTimeout(() => setShowSubtext(true), 400);
+        }
+      }, 70);
+      return () => clearInterval(interval);
+    }
+  }, [showHeading]);
+
   return (
     <div className={`min-h-screen w-full flex flex-col relative overflow-hidden transition-colors duration-300 ${
       isDarkMode ? 'bg-dark-main' : 'bg-gray-50'
@@ -109,42 +130,53 @@ export default function App() {
       <div className="flex-1 flex flex-col relative z-10 px-4 md:px-8 lg:px-12">
         {/* Welcome Message - only show when no chat history */}
           {showHeading && (
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-light text-center mb-8">
-              <span className={`font-normal ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Welcome to </span>
-              <span className="font-extrabold text-gradient-blue">PesonaAI!</span>
+          <div className="flex flex-col items-center justify-start pt-16 md:pt-24">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-center mb-2 select-none">
+              <span className={`font-normal ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{typedHeading.replace(/PesonaAI!$/, "")}</span>
+              <span className="font-extrabold text-gradient-blue">{typedHeading.endsWith("PesonaAI!") ? "PesonaAI!" : ""}</span>
             </h1>
-                         {/* Input positioned below welcome text when no chat */}
-             <div className="w-full max-w-4xl">
-               <form className="w-full flex items-center justify-center" onSubmit={handleSubmit}>
-                 <div className="flex items-center w-full bg-white rounded-[50px] shadow-md focus-within:ring-2 focus-within:ring-white/20 pr-4">
-                   <textarea
-                     placeholder={placeholder}
-                     className="flex-1 min-h-[48px] md:min-h-[56px] max-h-32 pl-6 py-3 text-gray-600 placeholder:text-gray-400 bg-transparent border-0 rounded-[50px] text-lg resize-none overflow-hidden focus:outline-none"
-                     value={question}
-                     onChange={e => setQuestion(e.target.value)}
-                     onKeyDown={e => {
-                       if (e.key === 'Enter' && !e.shiftKey) {
-                         e.preventDefault();
-                         handleSubmit(e);
-                       }
-                     }}
-                     disabled={loading}
-                     autoFocus
-                     rows={1}
-                   />
-                   <Button
-                     size="sm"
-                     type="submit"
-                     className="ml-2 h-9 w-9 md:h-10 md:w-10 rounded-full bg-white hover:bg-white/90 p-0 flex items-center justify-center shadow"
-                     disabled={loading}
-                   >
-                     <Send className="h-4 w-4 text-[#0e2148]" />
-                     <span className="sr-only">Send</span>
-                   </Button>
-                 </div>
-               </form>
-             </div>
+            {showSubtext && (
+              <div className={`text-base md:text-lg mt-2 mb-8 text-center ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                style={{ transition: 'color 0.3s' }}>
+                More than just an AI agent, it's your personal assistant
+              </div>
+            )}
+            {/* Input positioned below welcome text when no chat */}
+            <div className="w-full max-w-2xl mt-6">
+              <form className="w-full flex items-center justify-center" onSubmit={handleSubmit}>
+                <div className={`flex items-end w-full bg-white dark:bg-[#232325] rounded-2xl shadow-lg px-4 py-2 md:py-3 focus-within:ring-2 focus-within:ring-blue-400 transition-all duration-200 border border-gray-200 dark:border-[#333]`}>
+                  <textarea
+                    placeholder={placeholder}
+                    className="flex-1 min-h-[44px] max-h-40 md:min-h-[56px] px-3 py-2 md:px-4 md:py-3 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-transparent border-0 rounded-2xl text-base md:text-lg resize-none overflow-y-auto focus:outline-none custom-scrollbar"
+                    value={question}
+                    onChange={e => setQuestion(e.target.value)}
+                    onInput={e => {
+                      e.target.style.height = 'auto';
+                      e.target.style.height = e.target.scrollHeight + 'px';
+                    }}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit(e);
+                      }
+                    }}
+                    disabled={loading}
+                    autoFocus
+                    rows={1}
+                    style={{overflowY: 'auto'}}
+                  />
+                  <Button
+                    size="icon"
+                    type="submit"
+                    className={`ml-2 rounded-full h-11 w-11 flex items-center justify-center shadow-md transition-colors duration-200 ${isDarkMode ? 'bg-[#232325] hover:bg-[#333] text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                    disabled={loading}
+                  >
+                    <ArrowUp className="h-5 w-5" />
+                    <span className="sr-only">Send</span>
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
         
